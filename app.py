@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Database connection
 def get_connection():
     conn = psycopg2.connect(
         host="localhost",
@@ -16,7 +15,6 @@ def get_connection():
     )
     return conn
 
-# Add a new user
 def add_user(username):
     conn = get_connection()
     cur = conn.cursor()
@@ -25,7 +23,6 @@ def add_user(username):
     cur.close()
     conn.close()
 
-# Add a workout
 def add_workout(user_id, workout_duration):
     conn = get_connection()
     cur = conn.cursor()
@@ -37,7 +34,6 @@ def add_workout(user_id, workout_duration):
     conn.close()
     return workout_id
 
-# Add an exercise to a workout
 def add_exercise(workout_id, exercise_name, reps, weight):
     conn = get_connection()
     cur = conn.cursor()
@@ -46,7 +42,6 @@ def add_exercise(workout_id, exercise_name, reps, weight):
     cur.close()
     conn.close()
 
-# Retrieve user by username
 def get_user_id(username):
     conn = get_connection()
     cur = conn.cursor()
@@ -56,7 +51,6 @@ def get_user_id(username):
     conn.close()
     return user_id[0] if user_id else None
 
-# Retrieve workout history
 def get_workout_history(user_id):
     conn = get_connection()
     cur = conn.cursor()
@@ -72,17 +66,14 @@ def get_workout_history(user_id):
     conn.close()
     return rows
 
-# Streamlit app UI
 def main():
     st.title("Training Tracker")
 
-    # User input for username
     username = st.text_input("Enter your username:")
     if username:
         add_user(username)
         user_id = get_user_id(username)
 
-        # Add workout details
         with st.form("Workout Form"):
             workout_duration = st.slider("Workout Duration (minutes):", 0, 180, 60)
             exercise_name = st.text_input("Exercise Name:")
@@ -97,7 +88,6 @@ def main():
                     add_exercise(workout_id, exercise_name, reps, weight)
                     st.success("Workout added!")
 
-        # Display workout history
         st.subheader("Workout History")
         history = get_workout_history(user_id)
         for row in history:

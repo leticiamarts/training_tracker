@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Connection parameters
 conn = psycopg2.connect(
     host="localhost",
     database=os.getenv("DB_NAME"),
@@ -12,12 +11,8 @@ conn = psycopg2.connect(
     password=os.getenv("DB_PASSWORD")
 )
 
-
-
-# Create a cursor object
 cur = conn.cursor()
 
-# Create tables
 cur.execute('''
     CREATE TABLE IF NOT EXISTS users (
         user_id SERIAL PRIMARY KEY,
@@ -44,7 +39,6 @@ cur.execute('''
     );
 ''')
 
-# Commit and close connection
 conn.commit()
 cur.close()
 conn.close()
